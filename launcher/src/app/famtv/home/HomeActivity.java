@@ -59,6 +59,7 @@ public class HomeActivity extends Activity {
     private TextView greeting, date, heroTitle, heroHint;
     private String lastFocusedPkg;
     private ValueAnimator glowAnim;
+    private boolean photoMode;
 
     private final BroadcastReceiver packagesChanged = new BroadcastReceiver() {
         @Override public void onReceive(Context c, Intent i) { buildApps(); }
@@ -101,17 +102,27 @@ public class HomeActivity extends Activity {
         f.addAction(Intent.ACTION_PACKAGE_CHANGED);
         f.addDataScheme("package");
         registerReceiver(packagesChanged, f);
+        photoMode = photoFile().exists();
         buildApps();
+    }
+
+    /** Set by tools/set-background.sh; delete it to go back to plain black. */
+    private java.io.File photoFile() {
+        java.io.File dir = getExternalFilesDir(null);
+        return new java.io.File(dir != null ? dir : getFilesDir(), "background.jpg");
     }
 
     @Override protected void onResume() {
         super.onResume();
         handler.removeCallbacks(tick);
         handler.post(tick);
+        java.io.File photo = photoFile();
+        ambient.loadPhoto(photo);
+        if (photo.exists() != photoMode) {
+            photoMode = photo.exists();
+            buildApps();
+        }
         handler.post(this::restoreFocus);
-        // Set by tools/set-background.sh; delete the file to go back to plain black.
-        java.io.File dir = getExternalFilesDir(null);
-        if (dir != null) ambient.loadPhoto(new java.io.File(dir, "background.jpg"));
     }
 
     @Override protected void onPause() {
@@ -135,16 +146,32 @@ public class HomeActivity extends Activity {
 
     private void buildApps() {
         content.removeAllViews();
-        content.addView(topBar());
+        // In photo mode the first screen is exactly one screen tall: top bar at the top,
+        // favourites pinned to the bottom, and the photo's faces left clear in between.
+        LinearLayout page = content;
+        if (photoMode) {
+            page = new LinearLayout(this);
+            page.setOrientation(LinearLayout.VERTICAL);
+            page.setClipChildren(false);
+            int h = getResources().getDisplayMetrics().heightPixels - dp(36) - dp(30);
+            content.addView(page, new LinearLayout.LayoutParams(-1, h));
+        }
+        page.addView(topBar());
 
-        heroTitle = text("", 46, Color.WHITE, "sans-serif-light");
+        heroTitle = text("", photoMode ? 20 : 46, Color.WHITE,
+                photoMode ? "sans-serif-medium" : "sans-serif-light");
         heroHint = text("", 15, 0x99FFFFFF, "sans-serif");
         LinearLayout hero = new LinearLayout(this);
         hero.setOrientation(LinearLayout.VERTICAL);
-        hero.setPadding(0, dp(58), 0, dp(18));
         hero.addView(heroTitle);
-        hero.addView(heroHint);
-        content.addView(hero);
+        if (photoMode) {
+            page.addView(new View(this), new LinearLayout.LayoutParams(-1, 0, 1));
+            hero.setPadding(0, 0, 0, dp(12));
+        } else {
+            hero.setPadding(0, dp(58), 0, dp(18));
+            hero.addView(heroHint);
+        }
+        page.addView(hero);
 
         PackageManager pm = getPackageManager();
         Map<String, ResolveInfo> apps = new HashMap<>();
@@ -160,13 +187,14 @@ public class HomeActivity extends Activity {
         int favW = (dp(CONTENT_W) - dp(GAP) * (favs.size() - 1)) / Math.max(1, favs.size());
         LinearLayout favRow = new LinearLayout(this);
         favRow.setClipChildren(false);
+        favRow.setTag("favRow");
         for (int i = 0; i < favs.size(); i++) {
             View t = tile(apps.get(favs.get(i)), favW, i == 0 ? "fav0" : null);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(favW, favW * 9 / 16);
             if (i > 0) lp.leftMargin = dp(GAP);
             favRow.addView(t, lp);
         }
-        content.addView(favRow);
+        page.addView(favRow);
 
         List<ResolveInfo> rest = new ArrayList<>();
         for (Map.Entry<String, ResolveInfo> e : apps.entrySet())
@@ -357,10 +385,12 @@ public class HomeActivity extends Activity {
             if (has) {
                 Log.d("FamTV", "focus " + name);
                 lastFocusedPkg = (String) v.getTag();
-                heroTitle.setText(name);
+                boolean fav = "favRow".equals(((View) v.getParent()).getTag());
+                // In photo mode the label sits right above the favourites, so only label those.
+                heroTitle.setText(photoMode && !fav ? "" : name);
                 heroHint.setText("Press OK to open");
                 glowTo(colorOf(pkg, art));
-                if (tag != null && tag.startsWith("fav")) scroll.smoothScrollTo(0, 0);
+                if (fav) scroll.smoothScrollTo(0, 0);
             }
         });
         t.setOnClickListener(v -> {

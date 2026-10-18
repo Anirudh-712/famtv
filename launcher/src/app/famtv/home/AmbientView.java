@@ -58,17 +58,20 @@ public class AmbientView extends View {
         int w = getWidth(), h = getHeight();
         if (w == 0) return;
         if (photo != null) {
-            // centre-crop the photo to the screen
-            float scale = Math.max(w / (float) photo.getWidth(), h / (float) photo.getHeight());
-            int cw = Math.round(w / scale), ch = Math.round(h / scale);
-            int cx = (photo.getWidth() - cw) / 2, cy = (photo.getHeight() - ch) / 2;
-            canvas.drawBitmap(photo, new Rect(cx, cy, cx + cw, cy + ch), new Rect(0, 0, w, h), photoPaint);
+            // Fill the width and slide the photo down a little, so heads sit below the clock and
+            // greeting; the bottom that falls off-screen is behind the favourites row anyway.
+            int top = Math.round(h * 0.11f);
+            float scale = w / (float) photo.getWidth();
+            int visible = Math.min(photo.getHeight(), Math.round((h - top) / scale));
+            canvas.drawBitmap(photo, new Rect(0, 0, photo.getWidth(), visible),
+                    new Rect(0, top, w, top + Math.round(visible * scale)), photoPaint);
+            // Dark behind the top bar and the favourites row, clear over the faces.
             scrim.setShader(new LinearGradient(0, 0, 0, h,
-                    new int[]{0xA6000000, 0x66000000, 0xBF000000, 0xEB000000},
-                    new float[]{0f, 0.35f, 0.7f, 1f}, Shader.TileMode.CLAMP));
+                    new int[]{0xFF000000, 0xFF000000, 0x1A000000, 0x26000000, 0xCC000000, 0xF2000000},
+                    new float[]{0f, top / (float) h, 0.25f, 0.55f, 0.75f, 1f}, Shader.TileMode.CLAMP));
             canvas.drawRect(0, 0, w, h, scrim);
         }
-        int glow = (color & 0x00FFFFFF) | (photo != null ? 0x4D000000 : 0x8C000000);
+        int glow = (color & 0x00FFFFFF) | (photo != null ? 0x33000000 : 0x8C000000);
         paint.setShader(new RadialGradient(w * 0.22f, h * 0.18f, w * 0.75f,
                 new int[]{glow, (color & 0x00FFFFFF) | 0x26000000, 0x00000000},
                 new float[]{0f, 0.45f, 1f}, Shader.TileMode.CLAMP));
