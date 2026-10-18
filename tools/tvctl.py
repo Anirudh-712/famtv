@@ -78,10 +78,11 @@ def main():
     elif cmd == "push":
         push(dev, *args)
     elif cmd == "pull":
-        dev.pull(*args)
+        dev.pull(*args, transport_timeout_s=60.0, read_timeout_s=60.0)
     elif cmd == "shot":
         dev.shell("screencap -p /sdcard/_shot.png")
-        dev.pull("/sdcard/_shot.png", args[0] if args else "shot.png")
+        dev.pull("/sdcard/_shot.png", args[0] if args else "shot.png",
+                 transport_timeout_s=60.0, read_timeout_s=60.0)
     elif cmd == "key":
         for k in args:
             dev.shell(f"input keyevent KEYCODE_{k}")
