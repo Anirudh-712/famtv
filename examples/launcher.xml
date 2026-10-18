@@ -16,6 +16,9 @@
         <item>com.example.app.you.never.use</item>
     </string-array>
 
+    <!-- Telugu panchangam line under the greeting -->
+    <bool name="show_panchang">true</bool>
+
     <!-- Your TV's Live TV app, for the Inputs menu (Sony: com.sony.dtv.tvx). -->
     <string name="live_tv_package"></string>
 </resources>

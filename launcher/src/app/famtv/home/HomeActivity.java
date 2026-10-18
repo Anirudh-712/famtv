@@ -56,7 +56,7 @@ public class HomeActivity extends Activity {
     private AmbientView ambient;
     private ScrollView scroll;
     private LinearLayout content;
-    private TextView greeting, date, heroTitle, heroHint;
+    private TextView greeting, date, panchang, heroTitle, heroHint;
     private String lastFocusedPkg;
     private ValueAnimator glowAnim;
     private boolean photoMode;
@@ -79,6 +79,7 @@ public class HomeActivity extends Activity {
             String name = getString(R.string.family_name).trim();
             greeting.setText(hello + (name.isEmpty() ? "" : " " + name) + " " + icon);
             date.setText(new SimpleDateFormat("EEEE, d MMMM", Locale.getDefault()).format(now.getTime()));
+            if (panchang != null) panchang.setText(panchangText(now));
             handler.postDelayed(this, 30_000);
         }
     };
@@ -301,6 +302,14 @@ public class HomeActivity extends Activity {
         // One line: "Good morning <name>"
         greeting = text("", 30, Color.WHITE, "sans-serif-light");
         left.addView(greeting);
+        if (getResources().getBoolean(R.bool.show_panchang)) {
+            panchang = text("", 15, 0xD9FFFFFF, "sans-serif");
+            panchang.setSingleLine(false);
+            panchang.setMaxLines(2);
+            panchang.setLineSpacing(dp(2), 1f);
+            panchang.setPadding(0, dp(4), 0, 0);
+            left.addView(panchang);
+        }
         bar.addView(left, new LinearLayout.LayoutParams(0, -2, 1));
 
         bar.addView(pill("Inputs", v -> showInputs()));
@@ -449,6 +458,20 @@ public class HomeActivity extends Activity {
     }
 
     // ---------------------------------------------------------------- helpers
+
+    /** "Sri Parabhava nama samvatsaram · Ashwayuja masam" / "Shukla paksham · Ashtami till 10:51 AM tomorrow" */
+    private String panchangText(Calendar now) {
+        Panchang p = Panchang.at(now.getTimeInMillis());
+        Calendar end = Calendar.getInstance();
+        end.setTimeInMillis(p.tithiEndsMs);
+        int days = end.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
+        if (days < 0) days += now.getActualMaximum(Calendar.DAY_OF_YEAR);
+        String when = new SimpleDateFormat("h:mm a", Locale.ENGLISH).format(end.getTime())
+                + (days == 0 ? "" : days == 1 ? " tomorrow"
+                : " " + new SimpleDateFormat("EEE", Locale.ENGLISH).format(end.getTime()));
+        return "Sri " + p.samvatsaramName() + " nama samvatsaram  ·  " + p.masamName() + " masam\n"
+                + p.paksham() + " paksham  ·  " + p.tithiName() + " till " + when;
+    }
 
     private void launch(Intent i) {
         try {

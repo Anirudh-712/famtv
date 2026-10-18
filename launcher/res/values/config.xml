@@ -22,6 +22,9 @@
     <!-- App opened for the "TV" (antenna/cable) entry in the Inputs menu. -->
     <string name="live_tv_package"></string>
 
+    <!-- Telugu panchangam under the greeting (samvatsaram, masam, paksham, tithi), computed on the TV. -->
+    <bool name="show_panchang">false</bool>
+
     <!-- Tiles per row in "All apps". -->
     <integer name="grid_columns">5</integer>
 </resources>
