@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" font-family="Roboto, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <!-- Illustration of the FamTV home screen with placeholder content (no real photo or names). -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2b1d4e"/>
+      <stop offset="0.45" stop-color="#7a3b5c"/>
+      <stop offset="0.8" stop-color="#d9824a"/>
+      <stop offset="1" stop-color="#f2b766"/>
+    </linearGradient>
+    <linearGradient id="scrim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#000" stop-opacity="0.55"/>
+      <stop offset="0.3" stop-color="#000" stop-opacity="0.1"/>
+      <stop offset="0.55" stop-color="#000" stop-opacity="0.15"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.95"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.2" cy="0.85" r="0.5">
+      <stop offset="0" stop-color="#e50914" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#e50914" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fade" x1="0" x2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.06" stop-color="#fff"/>
+      <stop offset="0.94" stop-color="#fff"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="tick"><rect x="40" y="128" width="420" height="40" fill="url(#fade)"/></mask>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="4" flood-color="#000" flood-opacity="0.85"/></filter>
+    <filter id="gold"><feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff8a00" flood-opacity="0.8"/></filter>
+    <filter id="lift"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000" flood-opacity="0.6"/></filter>
+  </defs>
+
+  <!-- background "photo": a sunset with hills standing in for your family picture -->
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="1150" cy="330" r="80" fill="#ffd38a" opacity="0.9"/>
+  <path d="M0 470 Q300 360 620 450 T1250 420 T1600 450 V900 H0Z" fill="#3b2140" opacity="0.85"/>
+  <path d="M0 540 Q400 450 820 530 T1600 500 V900 H0Z" fill="#1f1326"/>
+  <rect width="1600" height="900" fill="url(#scrim)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+
+  <!-- optional header line -->
+  <text x="800" y="44" text-anchor="middle" font-size="26" fill="#ffc46b" filter="url(#gold)" font-weight="500">Welcome home</text>
+
+  <!-- top bar row 1 -->
+  <g filter="url(#sh)" fill="#fff">
+    <text x="40" y="104" font-size="26" font-weight="500">Good evening, Family 🌆</text>
+    <rect x="1040" y="74" width="120" height="42" rx="21" fill="#fff" fill-opacity="0.14"/>
+    <text x="1100" y="102" font-size="18" text-anchor="middle">Inputs</text>
+    <rect x="1174" y="74" width="132" height="42" rx="21" fill="#fff" fill-opacity="0.14"/>
+    <text x="1240" y="102" font-size="18" text-anchor="middle">Settings</text>
+    <text x="1560" y="112" font-size="58" font-weight="200" text-anchor="end">7:42</text>
+  </g>
+
+  <!-- row 2: panchangam ticker + date -->
+  <rect x="40" y="128" width="420" height="40" rx="18" fill="#101018" fill-opacity="0.55" stroke="#fff" stroke-opacity="0.2"/>
+  <g mask="url(#tick)">
+    <text x="30" y="154" font-size="17" fill="#fff" fill-opacity="0.92">aksham   ✦   Tithi: Ashtami till 10:51 AM tomorrow   ✦   Nakshatram: Uttarashadha</text>
+  </g>
+  <text x="1560" y="154" font-size="18" fill="#fff" fill-opacity="0.8" text-anchor="end" filter="url(#sh)">Sunday, 18 October</text>
+
+  <!-- focused favourite: title -->
+  <text x="40" y="600" font-size="40" font-weight="500" fill="#fff" filter="url(#sh)">Movies</text>
+  <text x="40" y="632" font-size="18" fill="#fff" fill-opacity="0.7" filter="url(#sh)">Press OK to open</text>
+
+  <!-- favourites row (placeholder apps) -->
+  <g font-size="30" font-weight="700" text-anchor="middle" fill="#fff">
+    <g filter="url(#lift)">
+      <rect x="28" y="658" width="398" height="214" rx="11" fill="#b20710"/>
+      <rect x="28" y="658" width="398" height="214" rx="11" fill="none" stroke="#fff" stroke-width="4"/>
+      <text x="227" y="776">MOVIES</text>
+    </g>
+    <rect x="458" y="670" width="350" height="196" rx="10" fill="#0f4c81"/>
+    <text x="633" y="778">SERIES</text>
+    <rect x="828" y="670" width="350" height="196" rx="10" fill="#1d6b46"/>
+    <text x="1003" y="778">SPORTS</text>
+    <rect x="1198" y="670" width="350" height="196" rx="10" fill="#c4302b"/>
+    <text x="1373" y="778">VIDEOS</text>
+  </g>
+</svg>
