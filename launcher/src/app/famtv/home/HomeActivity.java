@@ -79,7 +79,10 @@ public class HomeActivity extends Activity {
             String name = getString(R.string.family_name).trim();
             greeting.setText(hello + (name.isEmpty() ? "" : " " + name) + " " + icon);
             date.setText(new SimpleDateFormat("EEEE, d MMMM", Locale.getDefault()).format(now.getTime()));
-            if (panchang != null) panchang.setText(panchangText(now));
+            if (panchang != null) {
+                String t = panchangText(now);
+                if (!t.contentEquals(panchang.getText())) panchang.setText(t);   // keeps the scroll going
+            }
             handler.postDelayed(this, 30_000);
         }
     };
@@ -334,7 +337,7 @@ public class HomeActivity extends Activity {
 
         LinearLayout row2 = new LinearLayout(this);
         View card = panchangCard();
-        if (card != null) row2.addView(card);
+        if (card != null) row2.addView(card, card.getLayoutParams());
         row2.addView(new View(this), new LinearLayout.LayoutParams(0, 1, 1));
         date = text("", 14, 0xB3FFFFFF, "sans-serif");
         date.setGravity(Gravity.END);
@@ -353,17 +356,22 @@ public class HomeActivity extends Activity {
     /** The panchangam in a soft glass "cloud" card, or null when it's switched off. */
     private View panchangCard() {
         if (!getResources().getBoolean(R.bool.show_panchang)) return null;
-        panchang = text("", 13, 0xF2FFFFFF, "sans-serif");
-        panchang.setSingleLine(false);
-        panchang.setMaxLines(3);
-        panchang.setLineSpacing(dp(1), 1f);
+        panchang = text("", 14, 0xF2FFFFFF, "sans-serif");
+        // A single line that scrolls right-to-left forever, like a ticker.
+        panchang.setSingleLine(true);
+        panchang.setEllipsize(android.text.TextUtils.TruncateAt.MARQUEE);
+        panchang.setMarqueeRepeatLimit(-1);
+        panchang.setHorizontalFadingEdgeEnabled(true);
+        panchang.setFadingEdgeLength(dp(24));
+        panchang.setSelected(true);
         panchang.setShadowLayer(0, 0, 0, 0);
         GradientDrawable bg = new GradientDrawable();
         bg.setCornerRadius(dp(18));
         bg.setColor(0x8C101018);
         bg.setStroke(dp(1), 0x33FFFFFF);
         panchang.setBackground(bg);
-        panchang.setPadding(dp(16), dp(6), dp(16), dp(7));
+        panchang.setPadding(dp(16), dp(8), dp(16), dp(8));
+        panchang.setLayoutParams(new LinearLayout.LayoutParams(dp(380), -2));
         return panchang;
     }
 
@@ -487,18 +495,20 @@ public class HomeActivity extends Activity {
 
     // ---------------------------------------------------------------- helpers
 
-    /** Three lines: year, month and fortnight; tithi; nakshatram (each with its end time). */
+    private static final String SEP = "   ✦   ";
+
+    /** One line for the scrolling card: year · month · fortnight · tithi · nakshatram. */
     private String panchangText(Calendar now) {
         Panchang p = Panchang.at(now.getTimeInMillis());
         if (getResources().getBoolean(R.bool.panchang_telugu)) {
-            return "శ్రీ " + p.samvatsaramTe() + " నామ సంవత్సరం  ·  " + p.masamTe() + " మాసం  ·  "
-                    + p.pakshamTe() + " పక్షం\n"
-                    + "తిథి: " + p.tithiTe() + " " + untilTe(now, p.tithiEndsMs) + "\n"
+            return "శ్రీ " + p.samvatsaramTe() + " నామ సంవత్సరం" + SEP + p.masamTe() + " మాసం" + SEP
+                    + p.pakshamTe() + " పక్షం" + SEP
+                    + "తిథి: " + p.tithiTe() + " " + untilTe(now, p.tithiEndsMs) + SEP
                     + "నక్షత్రం: " + p.nakshatramTe() + " " + untilTe(now, p.nakshatramEndsMs);
         }
-        return "Sri " + p.samvatsaramName() + " nama samvatsaram  ·  " + p.masamName() + " masam  ·  "
-                + p.paksham() + " paksham\n"
-                + "Tithi: " + p.tithiName() + " till " + untilEn(now, p.tithiEndsMs) + "\n"
+        return "Sri " + p.samvatsaramName() + " nama samvatsaram" + SEP + p.masamName() + " masam" + SEP
+                + p.paksham() + " paksham" + SEP
+                + "Tithi: " + p.tithiName() + " till " + untilEn(now, p.tithiEndsMs) + SEP
                 + "Nakshatram: " + p.nakshatramName() + " till " + untilEn(now, p.nakshatramEndsMs);
     }
 
