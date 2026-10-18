@@ -24,6 +24,8 @@
 
     <!-- Telugu panchangam under the greeting (samvatsaram, masam, paksham, tithi), computed on the TV. -->
     <bool name="show_panchang">false</bool>
+    <!-- Panchangam in Telugu script (true) or English transliteration (false). -->
+    <bool name="panchang_telugu">true</bool>
 
     <!-- Tiles per row in "All apps". -->
     <integer name="grid_columns">5</integer>

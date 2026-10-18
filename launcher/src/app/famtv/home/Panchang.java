@@ -28,18 +28,52 @@ public final class Panchang {
             "Kalayukti", "Siddharthi", "Raudri", "Durmathi", "Dundubhi", "Rudhirodgari",
             "Raktakshi", "Krodhana", "Akshaya"};
 
+    static final String[] NAKSHATRAM = {
+            "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Arudra", "Punarvasu",
+            "Pushyami", "Ashlesha", "Makha", "Pubba", "Uttara", "Hasta", "Chitta", "Swati",
+            "Vishakha", "Anuradha", "Jyeshtha", "Moola", "Purvashadha", "Uttarashadha", "Shravanam",
+            "Dhanishtha", "Shatabhisham", "Purvabhadra", "Uttarabhadra", "Revati"};
+
+    // Telugu script
+    static final String[] TITHI_TE = {
+            "పాడ్యమి", "విదియ", "తదియ", "చవితి", "పంచమి", "షష్ఠి", "సప్తమి", "అష్టమి",
+            "నవమి", "దశమి", "ఏకాదశి", "ద్వాదశి", "త్రయోదశి", "చతుర్దశి"};
+    static final String[] MASAM_TE = {
+            "చైత్ర", "వైశాఖ", "జ్యేష్ఠ", "ఆషాఢ", "శ్రావణ", "భాద్రపద", "ఆశ్వయుజ",
+            "కార్తీక", "మార్గశిర", "పుష్య", "మాఘ", "ఫాల్గుణ"};
+    static final String[] NAKSHATRAM_TE = {
+            "అశ్విని", "భరణి", "కృత్తిక", "రోహిణి", "మృగశిర", "ఆరుద్ర", "పునర్వసు",
+            "పుష్యమి", "ఆశ్లేష", "మఖ", "పుబ్బ", "ఉత్తర", "హస్త", "చిత్త", "స్వాతి",
+            "విశాఖ", "అనూరాధ", "జ్యేష్ఠ", "మూల", "పూర్వాషాఢ", "ఉత్తరాషాఢ", "శ్రవణం",
+            "ధనిష్ఠ", "శతభిషం", "పూర్వాభాద్ర", "ఉత్తరాభాద్ర", "రేవతి"};
+    static final String[] SAMVATSARAM_TE = {
+            "ప్రభవ", "విభవ", "శుక్ల", "ప్రమోదూత", "ప్రజోత్పత్తి", "ఆంగీరస", "శ్రీముఖ",
+            "భావ", "యువ", "ధాత", "ఈశ్వర", "బహుధాన్య", "ప్రమాది", "విక్రమ", "వృష",
+            "చిత్రభాను", "స్వభాను", "తారణ", "పార్థివ", "వ్యయ", "సర్వజిత్", "సర్వధారి",
+            "విరోధి", "వికృతి", "ఖర", "నందన", "విజయ", "జయ", "మన్మథ", "దుర్ముఖి",
+            "హేవిళంబి", "విళంబి", "వికారి", "శార్వరి", "ప్లవ", "శుభకృత్", "శోభకృత్",
+            "క్రోధి", "విశ్వావసు", "పరాభవ", "ప్లవంగ", "కీలక", "సౌమ్య", "సాధారణ",
+            "విరోధికృత్", "పరీధావి", "ప్రమాదీచ", "ఆనంద", "రాక్షస", "నల", "పింగళ",
+            "కాళయుక్తి", "సిద్ధార్థి", "రౌద్రి", "దుర్మతి", "దుందుభి", "రుధిరోద్గారి",
+            "రక్తాక్షి", "క్రోధన", "అక్షయ"};
+
     public final int tithi;          // 1..30 (1-15 Shukla, 16-30 Krishna)
     public final long tithiEndsMs;   // when the current tithi ends
     public final int masam;          // 0 = Chaitra
     public final boolean adhika;     // leap month
     public final int samvatsaram;    // 0 = Prabhava
+    public final int nakshatram;     // 0 = Ashwini
+    public final long nakshatramEndsMs;
 
-    private Panchang(int tithi, long tithiEndsMs, int masam, boolean adhika, int samvatsaram) {
+    private Panchang(int tithi, long tithiEndsMs, int masam, boolean adhika, int samvatsaram,
+                     int nakshatram, long nakshatramEndsMs) {
         this.tithi = tithi;
         this.tithiEndsMs = tithiEndsMs;
         this.masam = masam;
         this.adhika = adhika;
         this.samvatsaram = samvatsaram;
+        this.nakshatram = nakshatram;
+        this.nakshatramEndsMs = nakshatramEndsMs;
     }
 
     public String tithiName() {
@@ -53,6 +87,22 @@ public final class Panchang {
     public String masamName() { return (adhika ? "Adhika " : "") + MASAM[masam]; }
 
     public String samvatsaramName() { return SAMVATSARAM[samvatsaram]; }
+
+    public String nakshatramName() { return NAKSHATRAM[nakshatram]; }
+
+    public String tithiTe() {
+        if (tithi == 15) return "పౌర్ణమి";
+        if (tithi == 30) return "అమావాస్య";
+        return TITHI_TE[(tithi - 1) % 15];
+    }
+
+    public String pakshamTe() { return tithi <= 15 ? "శుక్ల" : "కృష్ణ"; }
+
+    public String masamTe() { return (adhika ? "అధిక " : "") + MASAM_TE[masam]; }
+
+    public String samvatsaramTe() { return SAMVATSARAM_TE[samvatsaram]; }
+
+    public String nakshatramTe() { return NAKSHATRAM_TE[nakshatram]; }
 
     // ------------------------------------------------------------------ calculation
 
@@ -78,7 +128,23 @@ public final class Panchang {
         if (ist.get(Calendar.MONTH) <= Calendar.APRIL && masam >= 8) year--;
         int samvatsaram = Math.floorMod(year - 1987, 60);   // 1987-88 was Prabhava
 
-        return new Panchang(tithi, jdToMs(endJd), masam, adhika, samvatsaram);
+        // Nakshatram: the Moon's sidereal position in one of 27 equal parts of 13°20'.
+        double span = 360.0 / 27;
+        double moon = siderealMoon(jd);
+        int nak = (int) Math.floor(moon / span);
+        double nakEnd = jd;
+        for (int i = 0; i < 30; i++) {
+            double diff = (nak + 1) * span - siderealMoon(nakEnd);
+            diff = ((diff % 360) + 540) % 360 - 180;
+            nakEnd += diff / 13.18;                 // mean lunar motion, degrees per day
+            if (Math.abs(diff) < 1e-6) break;
+        }
+
+        return new Panchang(tithi, jdToMs(endJd), masam, adhika, samvatsaram, nak, jdToMs(nakEnd));
+    }
+
+    static double siderealMoon(double jd) {
+        return norm(moonLongitude(jd) - lahiri(jd));
     }
 
     /** Moon minus Sun, 0..360 degrees. */

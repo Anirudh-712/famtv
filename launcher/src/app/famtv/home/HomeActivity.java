@@ -303,9 +303,9 @@ public class HomeActivity extends Activity {
         greeting = text("", 30, Color.WHITE, "sans-serif-light");
         left.addView(greeting);
         if (getResources().getBoolean(R.bool.show_panchang)) {
-            panchang = text("", 15, 0xD9FFFFFF, "sans-serif");
+            panchang = text("", 14, 0xD9FFFFFF, "sans-serif");
             panchang.setSingleLine(false);
-            panchang.setMaxLines(2);
+            panchang.setMaxLines(3);
             panchang.setLineSpacing(dp(2), 1f);
             panchang.setPadding(0, dp(4), 0, 0);
             left.addView(panchang);
@@ -459,18 +459,46 @@ public class HomeActivity extends Activity {
 
     // ---------------------------------------------------------------- helpers
 
-    /** "Sri Parabhava nama samvatsaram · Ashwayuja masam" / "Shukla paksham · Ashtami till 10:51 AM tomorrow" */
+    /** Three lines: year, month and fortnight; tithi; nakshatram (each with its end time). */
     private String panchangText(Calendar now) {
         Panchang p = Panchang.at(now.getTimeInMillis());
-        Calendar end = Calendar.getInstance();
-        end.setTimeInMillis(p.tithiEndsMs);
+        if (getResources().getBoolean(R.bool.panchang_telugu)) {
+            return "శ్రీ " + p.samvatsaramTe() + " నామ సంవత్సరం  ·  " + p.masamTe() + " మాసం  ·  "
+                    + p.pakshamTe() + " పక్షం\n"
+                    + "తిథి: " + p.tithiTe() + " " + untilTe(now, p.tithiEndsMs) + "\n"
+                    + "నక్షత్రం: " + p.nakshatramTe() + " " + untilTe(now, p.nakshatramEndsMs);
+        }
+        return "Sri " + p.samvatsaramName() + " nama samvatsaram  ·  " + p.masamName() + " masam  ·  "
+                + p.paksham() + " paksham\n"
+                + "Tithi: " + p.tithiName() + " till " + untilEn(now, p.tithiEndsMs) + "\n"
+                + "Nakshatram: " + p.nakshatramName() + " till " + untilEn(now, p.nakshatramEndsMs);
+    }
+
+    private static int daysAhead(Calendar now, Calendar end) {
         int days = end.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
-        if (days < 0) days += now.getActualMaximum(Calendar.DAY_OF_YEAR);
-        String when = new SimpleDateFormat("h:mm a", Locale.ENGLISH).format(end.getTime())
+        return days < 0 ? days + now.getActualMaximum(Calendar.DAY_OF_YEAR) : days;
+    }
+
+    /** "10:51 AM tomorrow" */
+    private static String untilEn(Calendar now, long ms) {
+        Calendar end = Calendar.getInstance();
+        end.setTimeInMillis(ms);
+        int days = daysAhead(now, end);
+        return new SimpleDateFormat("h:mm a", Locale.ENGLISH).format(end.getTime())
                 + (days == 0 ? "" : days == 1 ? " tomorrow"
                 : " " + new SimpleDateFormat("EEE", Locale.ENGLISH).format(end.getTime()));
-        return "Sri " + p.samvatsaramName() + " nama samvatsaram  ·  " + p.masamName() + " masam\n"
-                + p.paksham() + " paksham  ·  " + p.tithiName() + " till " + when;
+    }
+
+    /** Panchangam style: "రేపు ఉ. 10:51 వరకు" (ఉ. morning, మ. afternoon, సా. evening, రా. night). */
+    private static String untilTe(Calendar now, long ms) {
+        Calendar end = Calendar.getInstance();
+        end.setTimeInMillis(ms);
+        int h = end.get(Calendar.HOUR_OF_DAY);
+        String part = h >= 4 && h < 12 ? "ఉ." : h >= 12 && h < 15 ? "మ." : h >= 15 && h < 19 ? "సా." : "రా.";
+        int days = daysAhead(now, end);
+        String day = days == 0 ? "" : days == 1 ? "రేపు " : "ఎల్లుండి ";
+        int h12 = h % 12 == 0 ? 12 : h % 12;
+        return day + part + " " + h12 + ":" + String.format(Locale.ENGLISH, "%02d", end.get(Calendar.MINUTE)) + " వరకు";
     }
 
     private void launch(Intent i) {
