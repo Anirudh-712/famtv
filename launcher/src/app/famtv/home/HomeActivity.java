@@ -68,10 +68,16 @@ public class HomeActivity extends Activity {
     private final Runnable tick = new Runnable() {
         @Override public void run() {
             Calendar now = Calendar.getInstance();
-            int h = now.get(Calendar.HOUR_OF_DAY);
-            String hello = h < 5 ? "Good night" : h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+            // "hour" extra lets you preview other times: am start -n app.famtv.home/.HomeActivity --ei hour 22
+            int h = getIntent().getIntExtra("hour", -1);
+            if (h < 0 || h > 23) h = now.get(Calendar.HOUR_OF_DAY);
+            String hello, icon;
+            if (h >= 5 && h < 12)       { hello = "Good morning";   icon = "\u2600\uFE0F"; }        // sun
+            else if (h >= 12 && h < 17) { hello = "Good afternoon"; icon = "\uD83C\uDF24\uFE0F"; } // sun behind cloud
+            else if (h >= 17 && h < 21) { hello = "Good evening";   icon = "\uD83C\uDF06"; }        // dusk city
+            else                        { hello = "Good night";     icon = "\uD83C\uDF19"; }        // crescent moon
             String name = getString(R.string.family_name).trim();
-            greeting.setText(name.isEmpty() ? hello : hello + " " + name);
+            greeting.setText(hello + (name.isEmpty() ? "" : " " + name) + " " + icon);
             date.setText(new SimpleDateFormat("EEEE, d MMMM", Locale.getDefault()).format(now.getTime()));
             handler.postDelayed(this, 30_000);
         }
@@ -112,6 +118,11 @@ public class HomeActivity extends Activity {
     private java.io.File photoFile() {
         java.io.File dir = getExternalFilesDir(null);
         return new java.io.File(dir != null ? dir : getFilesDir(), "background.jpg");
+    }
+
+    @Override protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     @Override protected void onResume() {
