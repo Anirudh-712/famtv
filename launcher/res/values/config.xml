@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Defaults. Don't put your own details here: copy examples/launcher.xml to private/launcher.xml
+  (git-ignored) and override any of these values there. launcher/build.sh layers it on top.
+  Find package names with: tools/tv sh 'pm list packages'
+-->
+<resources>
+    <string name="app_name">FamTV Home</string>
+
+    <!-- Shown under the time-of-day greeting. -->
+    <string name="family_name">Welcome home</string>
+
+    <!-- The big row, in this order. Apps that aren't installed are skipped. -->
+    <string-array name="favourites">
+        <item>com.netflix.ninja</item>
+        <item>com.google.android.youtube.tv</item>
+    </string-array>
+
+    <!-- Never shown as tiles. -->
+    <string-array name="hidden" />
+
+    <!-- App opened for the "TV" (antenna/cable) entry in the Inputs menu. -->
+    <string name="live_tv_package"></string>
+
+    <!-- Tiles per row in "All apps". -->
+    <integer name="grid_columns">5</integer>
+</resources>

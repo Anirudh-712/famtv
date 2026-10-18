@@ -1,0 +1,28 @@
+# Debloat list template. Copy to private/devices/<tv>.txt (git-ignored) and fill in your TV's
+# packages: tools/tv sh 'pm list packages'
+#
+# Everything is DISABLED for user 0 (pm disable-user), never uninstalled.
+# Apply: tools/debloat.sh private/devices/<tv>.txt
+# Undo:  tools/restore.sh private/devices/<tv>.txt
+#
+# Never disable inputs (tvinput.*), the Live TV app, Settings, the keyboard, or anything you are
+# unsure about. Look a package up first: tools/tv sh 'dumpsys package <pkg>'
+
+# Ad tracking / analytics (common on Android TVs)
+tv.samba.ssm                                # Samba TV: on-screen content fingerprinting (ACR)
+com.google.android.feedback
+com.google.android.tv.bugreportsender
+
+# Manufacturer promos and store demo mode, e.g. on Sony:
+# com.sony.dtv.sonyselect
+# com.sony.dtv.sonyselect.overlay
+# com.sony.dtv.demomode
+# com.sony.dtv.demosupport
+
+# Apps nobody in the house uses
+# com.example.unused.app
+
+# --- stock launcher: switched off by launcher/install.sh only AFTER FamTV is home ---
+#@launcher com.google.android.tvlauncher
+#@launcher com.google.android.leanbacklauncher
+#@launcher com.google.android.tvrecommendations

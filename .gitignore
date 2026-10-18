@@ -1,0 +1,8 @@
+backups/
+private/
+build/
+.gradle/
+local.properties
+*.png
+*.jpg
+*.heic

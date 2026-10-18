@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copy to private/launcher.xml (git-ignored) and edit. Anything you leave out keeps the default
+  from launcher/res/values/config.xml.
+-->
+<resources>
+    <string name="family_name">The Example family</string>
+
+    <string-array name="favourites">
+        <item>com.netflix.ninja</item>
+        <item>com.google.android.youtube.tv</item>
+    </string-array>
+
+    <string-array name="hidden">
+        <item>com.example.app.you.never.use</item>
+    </string-array>
+
+    <!-- Your TV's Live TV app, for the Inputs menu (Sony: com.sony.dtv.tvx). -->
+    <string name="live_tv_package"></string>
+</resources>
