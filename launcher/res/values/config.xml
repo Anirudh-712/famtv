@@ -10,6 +10,9 @@
     <!-- Follows the time-of-day greeting: "Good morning <name>". Empty for just "Good morning". -->
     <string name="family_name"></string>
 
+    <!-- Optional line centred at the very top of the screen (e.g. a blessing). Empty = none. -->
+    <string name="header_text"></string>
+
     <!-- The big row, in this order. Apps that aren't installed are skipped. -->
     <string-array name="favourites">
         <item>com.netflix.ninja</item>

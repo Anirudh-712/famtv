@@ -100,7 +100,7 @@ public class HomeActivity extends Activity {
         content.setOrientation(LinearLayout.VERTICAL);
         content.setClipChildren(false);
         content.setClipToPadding(false);
-        content.setPadding(dp(PAD), dp(36), dp(PAD), dp(80));
+        content.setPadding(dp(PAD), dp(topPad()), dp(PAD), dp(80));
         scroll.addView(content, new ViewGroup.LayoutParams(-1, -2));
         root.addView(scroll, match());
         setContentView(root);
@@ -167,8 +167,16 @@ public class HomeActivity extends Activity {
             page = new LinearLayout(this);
             page.setOrientation(LinearLayout.VERTICAL);
             page.setClipChildren(false);
-            int h = getResources().getDisplayMetrics().heightPixels - dp(36) - dp(30);
+            int h = getResources().getDisplayMetrics().heightPixels - dp(topPad()) - dp(30);
             content.addView(page, new LinearLayout.LayoutParams(-1, h));
+        }
+        String header = getString(R.string.header_text).trim();
+        if (!header.isEmpty()) {
+            // A line centred at the very top, e.g. a blessing.
+            TextView h = text(header, 20, 0xFFFFC46B, "sans-serif-medium");
+            h.setGravity(Gravity.CENTER_HORIZONTAL);
+            h.setShadowLayer(dp(10), 0, 0, 0xCCFF8A00);
+            page.addView(h, new LinearLayout.LayoutParams(-1, -2));
         }
         page.addView(topBar());
 
@@ -300,7 +308,7 @@ public class HomeActivity extends Activity {
         LinearLayout left = new LinearLayout(this);
         left.setOrientation(LinearLayout.VERTICAL);
         // One line: "Good morning <name>"
-        greeting = text("", 30, Color.WHITE, "sans-serif-light");
+        greeting = text("", 20, Color.WHITE, "sans-serif");
         left.addView(greeting);
         View card = panchangCard();
         if (card != null) {
@@ -335,6 +343,11 @@ public class HomeActivity extends Activity {
         right.setMinimumWidth(dp(220));
         bar.addView(right);
         return bar;
+    }
+
+    /** Less room above the top bar when a header line takes the top of the screen. */
+    private int topPad() {
+        return getString(R.string.header_text).trim().isEmpty() ? 36 : 12;
     }
 
     /** The panchangam in a soft glass "cloud" card, or null when it's switched off. */
