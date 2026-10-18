@@ -279,6 +279,7 @@ public class HomeActivity extends Activity {
         clock.setTextSize(TypedValue.COMPLEX_UNIT_SP, 44);
         clock.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
         clock.setIncludeFontPadding(false);
+        clock.setShadowLayer(dp(8), 0, dp(1), 0xE6000000);
         right.addView(clock);
         date = text("", 14, 0x99FFFFFF, "sans-serif");
         date.setGravity(Gravity.END);
@@ -441,6 +442,7 @@ public class HomeActivity extends Activity {
         t.setTextColor(color);
         t.setTypeface(Typeface.create(family, Typeface.NORMAL));
         t.setSingleLine(true);
+        t.setShadowLayer(dp(8), 0, dp(1), 0xE6000000);   // keeps text readable over a photo
         return t;
     }
 
