@@ -60,7 +60,7 @@ public class AmbientView extends View {
         if (photo != null) {
             // Fill the width and slide the photo down a little, so heads sit below the clock and
             // greeting; the bottom that falls off-screen is behind the favourites row anyway.
-            int top = Math.round(h * 0.11f);
+            int top = Math.round(h * 0.17f);
             float scale = w / (float) photo.getWidth();
             int visible = Math.min(photo.getHeight(), Math.round((h - top) / scale));
             canvas.drawBitmap(photo, new Rect(0, 0, photo.getWidth(), visible),
@@ -68,7 +68,7 @@ public class AmbientView extends View {
             // Dark behind the top bar and the favourites row, clear over the faces.
             scrim.setShader(new LinearGradient(0, 0, 0, h,
                     new int[]{0xFF000000, 0xFF000000, 0x1A000000, 0x26000000, 0xCC000000, 0xF2000000},
-                    new float[]{0f, top / (float) h, 0.25f, 0.55f, 0.75f, 1f}, Shader.TileMode.CLAMP));
+                    new float[]{0f, top / (float) h, top / (float) h + 0.13f, 0.55f, 0.75f, 1f}, Shader.TileMode.CLAMP));
             canvas.drawRect(0, 0, w, h, scrim);
         }
         int glow = (color & 0x00FFFFFF) | (photo != null ? 0x33000000 : 0x8C000000);

@@ -302,13 +302,11 @@ public class HomeActivity extends Activity {
         // One line: "Good morning <name>"
         greeting = text("", 30, Color.WHITE, "sans-serif-light");
         left.addView(greeting);
-        if (getResources().getBoolean(R.bool.show_panchang)) {
-            panchang = text("", 14, 0xD9FFFFFF, "sans-serif");
-            panchang.setSingleLine(false);
-            panchang.setMaxLines(3);
-            panchang.setLineSpacing(dp(2), 1f);
-            panchang.setPadding(0, dp(4), 0, 0);
-            left.addView(panchang);
+        View card = panchangCard();
+        if (card != null) {
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-2, -2);
+            lp.topMargin = dp(8);
+            left.addView(card, lp);
         }
         bar.addView(left, new LinearLayout.LayoutParams(0, -2, 1));
 
@@ -337,6 +335,23 @@ public class HomeActivity extends Activity {
         right.setMinimumWidth(dp(220));
         bar.addView(right);
         return bar;
+    }
+
+    /** The panchangam in a soft glass "cloud" card, or null when it's switched off. */
+    private View panchangCard() {
+        if (!getResources().getBoolean(R.bool.show_panchang)) return null;
+        panchang = text("", 13, 0xF2FFFFFF, "sans-serif");
+        panchang.setSingleLine(false);
+        panchang.setMaxLines(3);
+        panchang.setLineSpacing(dp(3), 1f);
+        panchang.setShadowLayer(0, 0, 0, 0);
+        GradientDrawable bg = new GradientDrawable();
+        bg.setCornerRadius(dp(18));
+        bg.setColor(0x8C101018);
+        bg.setStroke(dp(1), 0x33FFFFFF);
+        panchang.setBackground(bg);
+        panchang.setPadding(dp(16), dp(10), dp(16), dp(10));
+        return panchang;
     }
 
     private View pill(String label, View.OnClickListener click) {
