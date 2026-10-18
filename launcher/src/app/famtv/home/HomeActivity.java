@@ -301,47 +301,47 @@ public class HomeActivity extends Activity {
         if (v != null) v.requestFocus();
     }
 
+    /**
+     * Two rows on shared edges:  greeting ........ [Inputs] [Settings]  clock
+     *                            [panchangam card] ..................... date
+     */
     private View topBar() {
         LinearLayout bar = new LinearLayout(this);
-        bar.setGravity(Gravity.CENTER_VERTICAL);
+        bar.setOrientation(LinearLayout.VERTICAL);
 
-        LinearLayout left = new LinearLayout(this);
-        left.setOrientation(LinearLayout.VERTICAL);
-        // One line: "Good morning <name>"
+        LinearLayout row1 = new LinearLayout(this);
+        row1.setGravity(Gravity.CENTER_VERTICAL);
         greeting = text("", 20, Color.WHITE, "sans-serif");
-        left.addView(greeting);
-        View card = panchangCard();
-        if (card != null) {
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-2, -2);
-            lp.topMargin = dp(8);
-            left.addView(card, lp);
-        }
-        bar.addView(left, new LinearLayout.LayoutParams(0, -2, 1));
-
-        bar.addView(pill("Inputs", v -> showInputs()));
-        View settings = pill("Settings", v -> launch(new Intent(Settings.ACTION_SETTINGS)));
+        row1.addView(greeting, new LinearLayout.LayoutParams(0, -2, 1));
+        row1.addView(pill("Inputs", v -> showInputs()));
         LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(-2, -2);
         sp.leftMargin = dp(12);
-        sp.rightMargin = dp(28);
-        bar.addView(settings, sp);
-
-        LinearLayout right = new LinearLayout(this);
-        right.setOrientation(LinearLayout.VERTICAL);
-        right.setGravity(Gravity.END);
+        row1.addView(pill("Settings", v -> launch(new Intent(Settings.ACTION_SETTINGS))), sp);
         TextClock clock = new TextClock(this);
         clock.setFormat12Hour("h:mm");
         clock.setFormat24Hour("HH:mm");
         clock.setTextColor(Color.WHITE);
-        clock.setTextSize(TypedValue.COMPLEX_UNIT_SP, 44);
+        clock.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
         clock.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
         clock.setIncludeFontPadding(false);
         clock.setShadowLayer(dp(8), 0, dp(1), 0xE6000000);
-        right.addView(clock);
-        date = text("", 14, 0x99FFFFFF, "sans-serif");
+        clock.setGravity(Gravity.END);
+        clock.setMinWidth(dp(150));
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(-2, -2);
+        cp.leftMargin = dp(28);
+        row1.addView(clock, cp);
+        bar.addView(row1);
+
+        LinearLayout row2 = new LinearLayout(this);
+        View card = panchangCard();
+        if (card != null) row2.addView(card);
+        row2.addView(new View(this), new LinearLayout.LayoutParams(0, 1, 1));
+        date = text("", 14, 0xB3FFFFFF, "sans-serif");
         date.setGravity(Gravity.END);
-        right.addView(date, new LinearLayout.LayoutParams(-1, -2));
-        right.setMinimumWidth(dp(220));
-        bar.addView(right);
+        row2.addView(date);
+        LinearLayout.LayoutParams r2 = new LinearLayout.LayoutParams(-1, -2);
+        r2.topMargin = dp(4);
+        bar.addView(row2, r2);
         return bar;
     }
 
@@ -356,14 +356,14 @@ public class HomeActivity extends Activity {
         panchang = text("", 13, 0xF2FFFFFF, "sans-serif");
         panchang.setSingleLine(false);
         panchang.setMaxLines(3);
-        panchang.setLineSpacing(dp(3), 1f);
+        panchang.setLineSpacing(dp(1), 1f);
         panchang.setShadowLayer(0, 0, 0, 0);
         GradientDrawable bg = new GradientDrawable();
         bg.setCornerRadius(dp(18));
         bg.setColor(0x8C101018);
         bg.setStroke(dp(1), 0x33FFFFFF);
         panchang.setBackground(bg);
-        panchang.setPadding(dp(16), dp(10), dp(16), dp(10));
+        panchang.setPadding(dp(16), dp(6), dp(16), dp(7));
         return panchang;
     }
 
