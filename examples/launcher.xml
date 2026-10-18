@@ -4,7 +4,8 @@
   from launcher/res/values/config.xml.
 -->
 <resources>
-    <string name="family_name">The Example family</string>
+    <!-- Shown as "Good morning <name>" -->
+    <string name="family_name">Everyone</string>
 
     <string-array name="favourites">
         <item>com.netflix.ninja</item>

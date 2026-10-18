@@ -7,8 +7,8 @@
 <resources>
     <string name="app_name">FamTV Home</string>
 
-    <!-- Shown under the time-of-day greeting. -->
-    <string name="family_name">Welcome home</string>
+    <!-- Follows the time-of-day greeting: "Good morning <name>". Empty for just "Good morning". -->
+    <string name="family_name"></string>
 
     <!-- The big row, in this order. Apps that aren't installed are skipped. -->
     <string-array name="favourites">

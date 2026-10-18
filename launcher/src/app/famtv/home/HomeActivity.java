@@ -69,7 +69,9 @@ public class HomeActivity extends Activity {
         @Override public void run() {
             Calendar now = Calendar.getInstance();
             int h = now.get(Calendar.HOUR_OF_DAY);
-            greeting.setText(h < 5 ? "Good night" : h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening");
+            String hello = h < 5 ? "Good night" : h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+            String name = getString(R.string.family_name).trim();
+            greeting.setText(name.isEmpty() ? hello : hello + " " + name);
             date.setText(new SimpleDateFormat("EEEE, d MMMM", Locale.getDefault()).format(now.getTime()));
             handler.postDelayed(this, 30_000);
         }
@@ -285,9 +287,9 @@ public class HomeActivity extends Activity {
 
         LinearLayout left = new LinearLayout(this);
         left.setOrientation(LinearLayout.VERTICAL);
-        greeting = text("", 16, 0x99FFFFFF, "sans-serif");
+        // One line: "Good morning <name>"
+        greeting = text("", 30, Color.WHITE, "sans-serif-light");
         left.addView(greeting);
-        left.addView(text(getString(R.string.family_name), 30, Color.WHITE, "sans-serif-light"));
         bar.addView(left, new LinearLayout.LayoutParams(0, -2, 1));
 
         bar.addView(pill("Inputs", v -> showInputs()));
