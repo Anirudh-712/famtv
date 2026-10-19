@@ -25,7 +25,7 @@
     <!-- App opened for the "TV" (antenna/cable) entry in the Inputs menu. -->
     <string name="live_tv_package"></string>
 
-    <!-- Telugu panchangam under the greeting (samvatsaram, masam, paksham, tithi), computed on the TV. -->
+    <!-- Telugu panchangam under the greeting (samvatsaram, ruthuvu, masam, paksham, tithi, nakshatram), computed on the TV. -->
     <bool name="show_panchang">false</bool>
     <!-- Panchangam in Telugu script (true) or English transliteration (false). -->
     <bool name="panchang_telugu">true</bool>

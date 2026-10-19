@@ -100,6 +100,12 @@ public final class Panchang {
 
     public String masamTe() { return (adhika ? "అధిక " : "") + MASAM_TE[masam]; }
 
+    /** Season: each pair of lunar months from Chaitra (adhika masam shares its nija masam's). */
+    static final String[] RUTHUVU = { "Vasanta", "Grishma", "Varsha", "Sharad", "Hemanta", "Shishira" };
+    static final String[] RUTHUVU_TE = { "వసంత", "గ్రీష్మ", "వర్ష", "శరద్", "హేమంత", "శిశిర" };
+    public String ruthuvuName() { return RUTHUVU[masam / 2]; }
+    public String ruthuvuTe() { return RUTHUVU_TE[masam / 2]; }
+
     public String samvatsaramTe() { return SAMVATSARAM_TE[samvatsaram]; }
 
     public String nakshatramTe() { return NAKSHATRAM_TE[nakshatram]; }

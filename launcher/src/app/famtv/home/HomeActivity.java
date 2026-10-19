@@ -501,12 +501,12 @@ public class HomeActivity extends Activity {
     private String panchangText(Calendar now) {
         Panchang p = Panchang.at(now.getTimeInMillis());
         if (getResources().getBoolean(R.bool.panchang_telugu)) {
-            return "శ్రీ " + p.samvatsaramTe() + " నామ సంవత్సరం" + SEP + p.masamTe() + " మాసం" + SEP
+            return "శ్రీ " + p.samvatsaramTe() + " నామ సంవత్సరం" + SEP + p.ruthuvuTe() + " ఋతువు" + SEP + p.masamTe() + " మాసం" + SEP
                     + p.pakshamTe() + " పక్షం" + SEP
                     + "తిథి: " + p.tithiTe() + " " + untilTe(now, p.tithiEndsMs) + SEP
                     + "నక్షత్రం: " + p.nakshatramTe() + " " + untilTe(now, p.nakshatramEndsMs);
         }
-        return "Sri " + p.samvatsaramName() + " nama samvatsaram" + SEP + p.masamName() + " masam" + SEP
+        return "Sri " + p.samvatsaramName() + " nama samvatsaram" + SEP + p.ruthuvuName() + " ruthuvu" + SEP + p.masamName() + " masam" + SEP
                 + p.paksham() + " paksham" + SEP
                 + "Tithi: " + p.tithiName() + " till " + untilEn(now, p.tithiEndsMs) + SEP
                 + "Nakshatram: " + p.nakshatramName() + " till " + untilEn(now, p.nakshatramEndsMs);

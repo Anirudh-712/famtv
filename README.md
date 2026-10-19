@@ -17,7 +17,7 @@ everything can be undone with one command.
 - **Optional header line** centred at the top, e.g. a blessing, in saffron gold.
 - **Big favourites row**, plus every other app in a grid. The background glow takes the colour
   of the focused app.
-- **Telugu panchangam ticker**: samvatsaram, masam, paksham, tithi and nakshatram with end
+- **Telugu panchangam ticker**: samvatsaram, ruthuvu, masam, paksham, tithi and nakshatram with end
   times, in Telugu script or English. Computed on the TV from lunar and solar positions (Meeus,
   Lahiri ayanamsa, IST), so it works offline. Checked against published panchangams to within
   about a minute.
